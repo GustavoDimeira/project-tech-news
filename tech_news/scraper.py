@@ -1,3 +1,4 @@
+from parsel import Selector
 import requests
 import time
 
@@ -17,7 +18,16 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
+    response_list = []
+
+    selector = Selector(text=html_content)
+    links = selector.css(".cs-overlay-link").getall()
+
+    for link in links:
+        response_list.append(
+            link.split('<a href="')[1].split('" class="cs-overlay-link">')[0])
+
+    return response_list
 
 
 # Requisito 3
@@ -33,3 +43,6 @@ def scrape_news(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+
+print(scrape_updates(fetch("https://blog.betrybe.com/")))
