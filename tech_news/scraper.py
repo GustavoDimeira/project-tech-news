@@ -32,7 +32,13 @@ def scrape_updates(html_content):
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    button = selector.css(".next").get()
+
+    try:
+        return button.split('href="')[1].split('">Próxima</a>')[0]
+    except AttributeError:
+        return None
 
 
 # Requisito 4
@@ -45,4 +51,4 @@ def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
 
-print(scrape_updates(fetch("https://blog.betrybe.com/")))
+print(scrape_next_page_link(fetch("https://blog.betrybe.com/page/2/")))
