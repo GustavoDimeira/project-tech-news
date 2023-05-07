@@ -34,7 +34,11 @@ def search_by_date(date):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    response = []
+    query = {"category": {"$regex": category, "$options": "i"}}
+    items = search_news(query)
 
+    for item in items:
+        response.append((item["title"], item["url"]))
 
-# print(search_by_date("10-02-2000"))
+    return response
