@@ -65,19 +65,18 @@ def scrape_news(html_content):
 
 # Requisito 5
 def get_tech_news(amount):
-    link = "https://blog.betrybe.com"
     response = []
+    links = []
+    page_link = "https://blog.betrybe.com"
 
-    links = scrape_updates(fetch(link))
+    while(len(links) < amount):
+        page = fetch(page_link)
+        for link in scrape_updates(page):
+            links.append(link)
+        page_link = scrape_next_page_link(page)
+
     for i in range(amount):
         response.append(scrape_news(fetch(links[i])))
 
     create_news(response)
     return response
-
-
-i = 0
-
-for iten in get_tech_news(10):
-    i += 1
-    print(iten, i, "\n\n")
