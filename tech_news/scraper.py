@@ -22,11 +22,10 @@ def scrape_updates(html_content):
     response_list = []
 
     selector = Selector(text=html_content)
-    links = selector.css(".cs-overlay-link").getall()
+    links = selector.css(".cs-overlay-link::attr(href)").getall()
 
     for link in links:
-        response_list.append(
-            link.split('<a href="')[1].split('" class="cs-overlay-link">')[0])
+        response_list.append(link)
 
     return response_list
 
@@ -34,10 +33,10 @@ def scrape_updates(html_content):
 # Requisito 3
 def scrape_next_page_link(html_content):
     selector = Selector(text=html_content)
-    button = selector.css(".next").get()
+    button = selector.css(".next::attr(href)").get()
 
     try:
-        return button.split('href="')[1].split('">Próxima</a>')[0]
+        return button
     except AttributeError:
         return None
 
