@@ -43,12 +43,31 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(html_content)
+
+    response = {}
+
+    response["url"] = selector.css("link[rel='canonical']::attr(href)").get()
+    response["title"] = selector.css(".entry-title::text").get().strip()
+    response["timestamp"] = selector.css(".meta-date::text").get()
+    response["writer"] = selector.css(".author a::text").get()
+    response["reading_time"] = int(
+        selector.css(".meta-reading-time::text").get().split(" ")[0]
+    )
+    response["summary"] = (
+        selector.css(".entry-content p").xpath("string()").get().strip()
+    )
+    response["category"] = selector.css(".label::text").get()
+
+    return response
 
 
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
+# print(scrape_news(""))
 
-print(scrape_next_page_link(fetch("https://blog.betrybe.com/page/2/")))
+
+with open("tests/assets/trybe_pages/noticias/arquivo-bin.html") as f:
+    print(scrape_news(f.read()))
